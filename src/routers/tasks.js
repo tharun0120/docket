@@ -3,18 +3,21 @@ const Task = require("../models/tasks");
 const router = new express.Router();
 const auth = require("../middleware/auth");
 
+//create task
 router.post("/api/tasks", auth, async (req, res) => {
   const task = new Task({
     ...req.body,
-    owner: req.user._id,
+    user_id: req.user._id,
   });
   try {
     await task.save();
-    res.status(201).send(task);
+    res.status(201).send({ tasks: task, message: "Docket Added Successfully" });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({ error: error, message: "Oops an Error Occured" });
   }
 });
+
+//get tasks
 
 //get api/tasks?completed=true
 //get api/tasks?limit=10&skip=0
@@ -55,25 +58,31 @@ router.get("/api/tasks", auth, async (req, res) => {
         tmpRes[date].push(tasks[i]);
       }
     }
-    res.status(200).send(tmpRes);
+    res
+      .status(200)
+      .send({ tasks: tmpRes, message: "Dockets Fetched Successfully" });
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ error: error, message: "Oops an Error Occurred" });
   }
 });
 
+//get a single task
 router.get("/api/tasks/:id", auth, async (req, res) => {
   const _id = req.params.id;
 
   try {
-    const task = await Task.findOne({ _id, owner: req.user._id });
-    if (!task) return res.status(404).send();
+    const task = await Task.findOne({ _id, user_id: req.user._id });
+    if (!task) return res.status(404).send({ error: "No such Docket Found" });
 
-    res.status(200).send(task);
+    res
+      .status(200)
+      .send({ tasks: task, message: "Docket Fetched Successfully" });
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ error: error, message: "Oops an Error Occurred" });
   }
 });
 
+//update a task
 router.patch("/api/tasks/:id", auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ["description", "completed", "priorotize"];
@@ -87,31 +96,36 @@ router.patch("/api/tasks/:id", auth, async (req, res) => {
   try {
     const task = await Task.findOne({
       _id: req.params.id,
-      owner: req.user._id,
+      user_id: req.user._id,
     });
 
-    if (!task) return res.status(404).send();
+    if (!task) return res.status(404).send({ error: "No such Docket Found" });
 
     updates.forEach((update) => (task[update] = req.body[update]));
     await task.save();
-    res.send(task);
+    res
+      .status(200)
+      .send({ tasks: task, message: "Docket Updated Successfully" });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({ error: error, message: "Oops an Error Occurred" });
   }
 });
 
+//delete a task
 router.delete("/api/tasks/:id", auth, async (req, res) => {
   try {
     const task = await Task.findOneAndDelete({
       _id: req.params.id,
-      owner: req.user._id,
+      user_id: req.user._id,
     });
 
-    if (!task) return res.status(404).send();
+    if (!task) return res.status(404).send({ error: "No such Docket Found" });
 
-    res.send(task);
+    res
+      .status(200)
+      .send({ tasks: task, message: "Dockets Deleted Successfully" });
   } catch (error) {
-    res.status(500).send();
+    res.status(500).send({ error: error, message: "Oops an Error Occurred" });
   }
 });
 

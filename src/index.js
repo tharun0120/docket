@@ -6,7 +6,7 @@ const userRouter = require("./routers/user");
 const taskRouter = require("./routers/tasks");
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(userRouter);
@@ -16,6 +16,10 @@ app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+});
+
+app.get("/test", (req, res) => {
+  res.status(200).send("Server is up and running Successfully");
 });
 
 app.listen(port, () => {
