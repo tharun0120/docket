@@ -21,7 +21,7 @@ function HomePage() {
       dispatch(isLoggedIn());
       if (!isSuccess) history.push("/login");
     }
-  }, []); //eslint-disable-line
+  }, [user]); //eslint-disable-line
 
   return (
     <section

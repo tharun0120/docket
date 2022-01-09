@@ -35,6 +35,19 @@ const logout = createAsyncThunk("/api/auth/logout", (thunkAPI) => {
   });
 });
 
+const deleteUser = createAsyncThunk("/api/user/me/delete", (thunkAPI) => {
+  return new Promise(async (resolve, reject) => {
+    await auth
+      .deleteUser()
+      .then((message) => {
+        resolve(message);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+});
+
 const register = createAsyncThunk("/api/auth/register", (user, thunkAPI) => {
   return new Promise(async (resolve, reject) => {
     await auth
@@ -137,7 +150,7 @@ const userSlice = createSlice({
       state.isFetching = false;
       state.isError = true;
       state.isSuccess = false;
-      console.log(payload);
+      // console.log(payload);
       state.error = payload;
     },
     //getUser
@@ -195,6 +208,24 @@ const userSlice = createSlice({
       state.isSuccess = false;
       state.error = payload;
     },
+    //delete user
+    [deleteUser.pending]: (state) => {
+      state.isFetching = true;
+      state.isError = false;
+      state.isSuccess = false;
+    },
+    [deleteUser.fulfilled]: (state) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+      state.isError = false;
+      state.user = null;
+    },
+    [deleteUser.rejected]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isError = true;
+      state.isSuccess = false;
+      state.error = payload;
+    },
     //isLoggedin
     [isLoggedIn.pending]: (state) => {
       state.isFetching = true;
@@ -215,7 +246,7 @@ const userSlice = createSlice({
   },
 });
 
-export { login, register, logout, isLoggedIn, updateUser, getUser };
+export { login, register, logout, isLoggedIn, updateUser, getUser, deleteUser };
 
 export const { clearState } = userSlice.actions;
 

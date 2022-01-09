@@ -4,7 +4,15 @@ import Header from "../components/Header";
 
 function AccountPage() {
   return (
-    <section>
+    <section
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+        gap: "25px",
+      }}>
       <Header />
       <Account />
     </section>

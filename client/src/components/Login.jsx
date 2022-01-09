@@ -32,13 +32,13 @@ const Login = () => {
       history.push("/");
     }
     if (isError) {
-      if (error.error) {
-        toast.error(error.error);
-        return dispatch(clearState());
-      }
-      error.errors.map((error) => {
-        return toast.error(error);
-      });
+      // if (error?.error) {
+      //   toast.error(error?.error);
+      //   return dispatch(clearState());
+      // }
+      // error.errors.map((error) => {
+      //   return toast.error(error);
+      // });
       dispatch(clearState());
     }
   }, [isSuccess, isError]); //eslint-disable-line

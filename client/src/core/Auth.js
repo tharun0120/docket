@@ -139,6 +139,32 @@ class AuthClass {
     });
   }
 
+  //delete user
+  deleteUser() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch("api/users/me", {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        });
+        await response.json().then((data) => {
+          if (response.status === 200) {
+            localStorage.removeItem("token");
+            resolve(data.user);
+          } else {
+            reject(data);
+          }
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   isLoggedIn() {
     return new Promise(async (resolve, reject) => {
       if (localStorage.getItem("token")) {
