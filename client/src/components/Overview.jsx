@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import moment from "moment";
 import { useSelector } from "react-redux";
 import { selectUser } from "../app/userSlice";
 import { selectTasks } from "../app/taskSlice";
@@ -12,11 +13,48 @@ function Overview() {
   const { user } = useSelector(selectUser);
   const { tasks } = useSelector(selectTasks);
 
+  useEffect(() => {}, [user, tasks]);
+
   const getLength = () => {
     const keys = Object.keys(tasks);
     let count = 0;
-    keys.map((date) => {
+    keys.forEach((date) => {
       count += tasks[date].length;
+    });
+    return count;
+  };
+
+  const getPriorityLength = () => {
+    const keys = Object.keys(tasks);
+    let count = 0;
+    keys.forEach((date) => {
+      tasks[date].forEach((task) => {
+        if (!task.completed) if (task.priorotize) count += 1;
+      });
+    });
+    return count;
+  };
+
+  const getCompletedLength = () => {
+    const keys = Object.keys(tasks);
+    let count = 0;
+    keys.forEach((date) => {
+      tasks[date].forEach((task) => {
+        if (task.completed) count += 1;
+      });
+    });
+    return count;
+  };
+
+  const getOverdueLength = () => {
+    const keys = Object.keys(tasks);
+    let count = 0;
+    const currentTime = moment().unix();
+    keys.forEach((date) => {
+      tasks[date].forEach((task) => {
+        const deadline = moment(task.deadline).unix();
+        if (!task.completed) if (deadline < currentTime) count += 1;
+      });
     });
     return count;
   };
@@ -41,17 +79,17 @@ function Overview() {
         <Wrap>
           <FcHighPriority />
           <label>Priority </label>
-          <span>{getLength()}</span>
+          <span>{getPriorityLength()}</span>
         </Wrap>
         <Wrap>
           <MdOutlineDoneOutline style={{ color: "green" }} />
           <label>Done </label>
-          <span>{getLength()}</span>
+          <span>{getCompletedLength()}</span>
         </Wrap>
         <Wrap>
           <CgDanger style={{ color: "orange" }} />
           <label>Overdue </label>
-          <span>{getLength()}</span>
+          <span>{getOverdueLength()}</span>
         </Wrap>
       </Content>
     </Container>

@@ -61,6 +61,35 @@ const isLoggedIn = createAsyncThunk("/api/auth/isLoggedIn", (thunkAPI) => {
   });
 });
 
+const getUser = createAsyncThunk("/api/users/me", (thunkAPI) => {
+  return new Promise(async (resolve, reject) => {
+    await auth
+      .getUser()
+      .then((user) => {
+        resolve(user);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+});
+
+const updateUser = createAsyncThunk(
+  "/api/users/me/update",
+  (toUpdate, thunkAPI) => {
+    return new Promise(async (resolve, reject) => {
+      await auth
+        .update(toUpdate)
+        .then((user) => {
+          resolve(user);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+);
+
 const userSlice = createSlice({
   name: "userState",
   initialState,
@@ -83,9 +112,47 @@ const userSlice = createSlice({
       state.isFetching = false;
       state.isSuccess = true;
       state.isError = false;
-      state.user = payload.user;
+      state.user = payload;
     },
     [login.rejected]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isError = true;
+      state.isSuccess = false;
+      console.log(payload);
+      state.error = payload;
+    },
+    //updateUser
+    [updateUser.pending]: (state) => {
+      state.isFetching = true;
+      state.isError = false;
+      state.isSuccess = false;
+    },
+    [updateUser.fulfilled]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+      state.isError = false;
+      state.user = payload;
+    },
+    [updateUser.rejected]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isError = true;
+      state.isSuccess = false;
+      console.log(payload);
+      state.error = payload;
+    },
+    //getUser
+    [getUser.pending]: (state) => {
+      state.isFetching = true;
+      state.isError = false;
+      state.isSuccess = false;
+    },
+    [getUser.fulfilled]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+      state.isError = false;
+      state.user = payload;
+    },
+    [getUser.rejected]: (state, { payload }) => {
       state.isFetching = false;
       state.isError = true;
       state.isSuccess = false;
@@ -102,7 +169,7 @@ const userSlice = createSlice({
       state.isFetching = false;
       state.isSuccess = true;
       state.isError = false;
-      state.user = payload.user;
+      state.user = payload;
     },
     [register.rejected]: (state, { payload }) => {
       state.isFetching = false;
@@ -148,7 +215,7 @@ const userSlice = createSlice({
   },
 });
 
-export { login, register, logout, isLoggedIn };
+export { login, register, logout, isLoggedIn, updateUser, getUser };
 
 export const { clearState } = userSlice.actions;
 

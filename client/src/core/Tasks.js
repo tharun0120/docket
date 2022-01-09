@@ -15,7 +15,7 @@ class TaskClass {
           body: JSON.stringify(task),
         });
         await response.json().then((data) => {
-          if (response.status === 200) {
+          if (response.status === 201) {
             resolve(data.tasks);
           } else {
             reject(data);

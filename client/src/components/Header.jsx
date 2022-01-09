@@ -4,6 +4,7 @@ import { FaHome } from "react-icons/fa";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { AiFillFire } from "react-icons/ai";
 import { BsInfoCircle } from "react-icons/bs";
+import ReactTooltip from "react-tooltip";
 
 const Header = ({ streak, page }) => {
   return (
@@ -12,22 +13,23 @@ const Header = ({ streak, page }) => {
         Docket.
       </h1>
       <ButtonPanel>
-        <Link to="/">
+        <Link to="/" data-tip="Home">
           <FaHome />
         </Link>
 
         <div>
-          <AiFillFire />
+          <AiFillFire data-tip="streak" />
         </div>
 
-        <Link to="/account">
+        <Link to="/account" data-tip="Account">
           <MdOutlineAccountCircle />
         </Link>
 
-        <Link to="/about">
+        <Link to="/about" data-tip="About">
           <BsInfoCircle />
         </Link>
       </ButtonPanel>
+      <ReactTooltip place="bottom" type="dark" />
     </Container>
   );
 };

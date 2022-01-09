@@ -47,8 +47,61 @@ class AuthClass {
           }),
         });
         await response.json().then((data) => {
-          if (response.status === 200) {
+          if (response.status === 201) {
             localStorage.setItem("token", data.token);
+            resolve(data.user);
+          } else {
+            reject(data);
+          }
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  //upate user
+  update(toUpdate) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch("/api/users/me", {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+          body: JSON.stringify({
+            ...toUpdate,
+          }),
+        });
+        await response.json().then((data) => {
+          if (response.status === 200) {
+            resolve(data.user);
+          } else {
+            reject(data);
+          }
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  //get User
+  getUser() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch("/api/users/me", {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        });
+        await response.json().then((data) => {
+          if (response.status === 200) {
             resolve(data.user);
           } else {
             reject(data);
