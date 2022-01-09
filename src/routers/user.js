@@ -6,7 +6,7 @@ const auth = require("../middleware/auth");
 const multer = require("multer");
 
 //register user
-router.post("/api/users", async (req, res) => {
+router.post("/api/users/register", async (req, res) => {
   const user = new User(req.body);
   try {
     await user.save();

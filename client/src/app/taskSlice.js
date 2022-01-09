@@ -1,0 +1,163 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import TaskClass from "../core/Tasks";
+
+const initialState = {
+  tasks: [],
+  isFetching: false,
+  isSuccess: false,
+  isError: false,
+  error: [],
+};
+
+const task = new TaskClass();
+
+const createTask = createAsyncThunk("/api/createTask", (tasks, thunkAPI) => {
+  return new Promise(async (resolve, reject) => {
+    await task
+      .createTask(tasks)
+      .then((tasks) => resolve(tasks))
+      .catch((error) => {
+        reject(thunkAPI.rejectWithValue(error));
+      });
+  });
+});
+
+const getTasks = createAsyncThunk("/api/getTasks", (thunkAPI) => {
+  return new Promise(async (resolve, reject) => {
+    await task
+      .getTasks()
+      .then((tasks) => resolve(tasks))
+      .catch((error) => reject(error));
+  });
+});
+
+const deleteTask = createAsyncThunk("/api/tasks", (tasks, thunkAPI) => {
+  return new Promise(async (resolve, reject) => {
+    await task
+      .deleteTasks(tasks)
+      .then((deletedTask) => resolve(deletedTask))
+      .catch((error) => reject(thunkAPI.rejectWithValue(error)));
+  });
+});
+
+const updateTask = createAsyncThunk(
+  "/api/updateTask",
+  (taskToUpdate, thunkAPI) => {
+    return new Promise(async (resolve, reject) => {
+      await task
+        .updateTask(taskToUpdate)
+        .then((updatedTasks) => resolve(updatedTasks))
+        .catch((error) => reject(thunkAPI.rejectWithValue(error)));
+    });
+  }
+);
+
+const taskSlice = createSlice({
+  name: "taskState",
+  initialState,
+  reducers: {
+    clearTaskState: (state) => {
+      state.tasks = [];
+      state.isFetching = false;
+      state.isSuccess = false;
+      state.isError = false;
+      state.error = [];
+    },
+  },
+  extraReducers: {
+    //createTask
+    [createTask.pending]: (state) => {
+      state.isFetching = true;
+      state.isError = false;
+      state.isSuccess = false;
+    },
+    [createTask.fulfilled]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+      state.isError = false;
+      const date = payload.deadline.slice(0, 10);
+      if (!state.tasks.hasOwnProperty(date)) {
+        state.tasks[date] = [payload];
+      } else {
+        state.tasks[date].push(payload);
+      }
+    },
+    [createTask.rejected]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isError = true;
+      state.isSuccess = false;
+      state.error = payload;
+    },
+    //getTasks
+    [getTasks.pending]: (state) => {
+      state.isFetching = true;
+      state.isError = false;
+      state.isSuccess = false;
+    },
+    [getTasks.fulfilled]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+      state.isError = false;
+      state.tasks = payload;
+      // console.log(payload.tasks);
+    },
+    [getTasks.rejected]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isError = true;
+      state.isSuccess = false;
+      state.error = payload;
+    },
+    //deleteTasks
+    [deleteTask.pending]: (state) => {
+      state.isFetching = true;
+      state.isError = false;
+      state.isSuccess = false;
+    },
+    [deleteTask.fulfilled]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+      state.isError = false;
+      const date = payload.deadline.slice(0, 10);
+      state.tasks[date] = state.tasks[date].filter((task) => {
+        return task._id !== payload._id;
+      });
+      if (state.tasks[date].length === 0) delete state.tasks[date];
+    },
+    [deleteTask.rejected]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isError = true;
+      state.isSuccess = false;
+      state.error = payload;
+    },
+    //updateTask
+    [updateTask.pending]: (state) => {
+      state.isFetching = true;
+      state.isError = false;
+      state.isSuccess = false;
+    },
+    [updateTask.fulfilled]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+      state.isError = false;
+      const date = payload.deadline.slice(0, 10);
+      state.tasks[date] = state.tasks[date].map((task) => {
+        if (task._id === payload._id) return payload;
+        else return task;
+      });
+    },
+    [updateTask.rejected]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isError = true;
+      state.isSuccess = false;
+      state.error = payload;
+    },
+  },
+});
+
+export { createTask, getTasks, deleteTask, updateTask };
+
+export const { clearTaskState } = taskSlice.actions;
+
+export const selectTasks = (state) => state.taskState;
+
+export default taskSlice.reducer;
