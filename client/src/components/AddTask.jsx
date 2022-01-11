@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
 import { SubmitButton } from "./Login";
 import { createTask, selectTasks, clearTaskState } from "../app/taskSlice";
+import { updateUser, selectUser } from "../app/userSlice";
 
 const AddTask = ({ addTask, setShowAddTask }) => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const AddTask = ({ addTask, setShowAddTask }) => {
   const [deadline, setDeadline] = useState("");
   const [important, setImportant] = useState();
   const { isSuccess, isError, error } = useSelector(selectTasks);
+  const { user } = useSelector(selectUser);
   // const [showAddTask, setShowAddTask] = useState(addTask);
   const [title, setTitle] = useState("");
 
@@ -36,6 +38,7 @@ const AddTask = ({ addTask, setShowAddTask }) => {
       toast.success("Task Added!");
       // setShowAddTask(!showAddTask);
       setShowAddTask(!addTask);
+      dispatch(updateUser({ total_tasks: user.total_tasks + 1 }));
     }
   };
 

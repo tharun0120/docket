@@ -47,6 +47,18 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: Buffer,
     },
+    total_tasks: {
+      type: Number,
+      default: 0,
+    },
+    priority_tasks: {
+      type: Number,
+      default: 0,
+    },
+    completed_tasks: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

@@ -70,7 +70,15 @@ router.get("/api/users/me", auth, async (req, res) => {
 //update user
 router.patch("/api/users/me", auth, async (req, res) => {
   const updates = Object.keys(req.body);
-  const allowedUpdates = ["displayName", "email", "password", "streak"];
+  const allowedUpdates = [
+    "displayName",
+    "email",
+    "password",
+    "streak",
+    "total_tasks",
+    "priority_tasks",
+    "completed_tasks",
+  ];
   const isValidOperation = updates.every((update) =>
     allowedUpdates.includes(update)
   );
@@ -118,7 +126,7 @@ const upload = multer({
 router.post(
   "/api/users/me/avatar",
   auth,
-  upload.single("avatars"),
+  upload.single("avatar"),
   async (req, res) => {
     const buffer = await sharp(req.file.buffer)
       .resize({ width: 250, height: 250 })

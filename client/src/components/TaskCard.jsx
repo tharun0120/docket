@@ -30,9 +30,26 @@ const TaskCard = ({ id, date }) => {
   }, [isError]); //eslint-disable-line
 
   const onDelete = (task) => {
+    const completed = task.completed;
+    const priority = task.priorotize;
     dispatch(deleteTask(task));
     if (isSuccess) {
       toast.success("Task Deleted!");
+      dispatch(
+        updateUser({
+          total_tasks: user.total_tasks - 1 === 0 ? 0 : user.total_tasks - 1,
+          completed_tasks: completed
+            ? user.completed_tasks - 1 === 0
+              ? 0
+              : user.completed_tasks - 1
+            : user.completed_tasks,
+          priority_tasks: priority
+            ? user.priority_tasks - 1 === 0
+              ? 0
+              : user.priority_tasks - 1
+            : user.priority_tasks,
+        })
+      );
       return;
     }
   };
@@ -44,11 +61,17 @@ const TaskCard = ({ id, date }) => {
   };
 
   const makePriority = (task) => {
+    const priority = task.priorotize;
     const taskToUpdate = {
       id: task._id,
       completed: task.completed,
       priorotize: !task.priorotize,
     };
+    if (priority) {
+      dispatch(updateUser({ priority_tasks: user.priority_tasks - 1 }));
+    } else {
+      dispatch(updateUser({ priority_tasks: user.priority_tasks + 1 }));
+    }
     dispatch(updateTask(taskToUpdate));
   };
 
@@ -62,8 +85,16 @@ const TaskCard = ({ id, date }) => {
     const deadline = moment(task.deadline).unix();
     const currentTime = moment().unix();
     if (deadline > currentTime)
-      dispatch(updateUser({ streak: user.streak + 1 }));
-    else if (user.streak > 0) dispatch(updateUser({ streak: 0 }));
+      dispatch(
+        updateUser({
+          streak: user.streak + 1,
+          completed_tasks: user.completed_tasks + 1,
+        })
+      );
+    else if (user.streak > 0)
+      dispatch(
+        updateUser({ streak: 0, completed_tasks: user.completed_tasks + 1 })
+      );
   };
 
   return tasks[date].map((task) => {

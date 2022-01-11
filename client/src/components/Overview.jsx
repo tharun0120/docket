@@ -1,34 +1,39 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { selectUser } from "../app/userSlice";
-import { selectTasks } from "../app/taskSlice";
+import { selectTasks, getAllTasks } from "../app/taskSlice";
+import { useDispatch } from "react-redux";
 import { FcHighPriority } from "react-icons/fc";
 import { MdOutlineDoneOutline } from "react-icons/md";
 import { CgDanger, CgStack } from "react-icons/cg";
 import { AiOutlineFire } from "react-icons/ai";
+// import { toast } from "react-toastify";
 
 function Overview() {
   const { user } = useSelector(selectUser);
-  const { tasks } = useSelector(selectTasks);
+  const { allTasks, tasks } = useSelector(selectTasks);
+  const dispatch = useDispatch();
 
-  useEffect(() => {}, [user, tasks]);
+  useEffect(() => {
+    dispatch(getAllTasks());
+  }, [user, tasks]); //eslint-disable-line
 
   const getLength = () => {
-    const keys = Object.keys(tasks);
+    const keys = Object.keys(allTasks);
     let count = 0;
     keys.forEach((date) => {
-      count += tasks[date].length;
+      count += allTasks[date].length;
     });
     return count;
   };
 
   const getPriorityLength = () => {
-    const keys = Object.keys(tasks);
+    const keys = Object.keys(allTasks);
     let count = 0;
     keys.forEach((date) => {
-      tasks[date].forEach((task) => {
+      allTasks[date].forEach((task) => {
         if (!task.completed) if (task.priorotize) count += 1;
       });
     });
@@ -36,10 +41,10 @@ function Overview() {
   };
 
   const getCompletedLength = () => {
-    const keys = Object.keys(tasks);
+    const keys = Object.keys(allTasks);
     let count = 0;
     keys.forEach((date) => {
-      tasks[date].forEach((task) => {
+      allTasks[date].forEach((task) => {
         if (task.completed) count += 1;
       });
     });
@@ -47,11 +52,11 @@ function Overview() {
   };
 
   const getOverdueLength = () => {
-    const keys = Object.keys(tasks);
+    const keys = Object.keys(allTasks);
     let count = 0;
     const currentTime = moment().unix();
     keys.forEach((date) => {
-      tasks[date].forEach((task) => {
+      allTasks[date].forEach((task) => {
         const deadline = moment(task.deadline).unix();
         if (!task.completed) if (deadline < currentTime) count += 1;
       });
@@ -113,10 +118,11 @@ const Content = styled.div`
 `;
 
 const Wrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 10px;
+  place-items: center;
+  gap: 10px;
   padding: 20px;
   font-size: 20px;
   text-transform: uppercase;

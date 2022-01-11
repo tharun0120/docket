@@ -22,12 +22,16 @@ router.post("/api/tasks", auth, async (req, res) => {
 //get api/tasks?completed=true
 //get api/tasks?limit=10&skip=0
 //get api/tasks?sortBy=createdAt_asc/desc
+//get api/tasks?priorotize=true
 router.get("/api/tasks", auth, async (req, res) => {
   const match = {};
   const sort = {};
 
   if (req.query.completed) {
     match.completed = req.query.completed === "true";
+  }
+  if (req.query.priorotize) {
+    match.priorotize = req.query.priorotize === "true";
   }
 
   if (req.query.sortBy) {
@@ -66,17 +70,51 @@ router.get("/api/tasks", auth, async (req, res) => {
   }
 });
 
+//search
+router.get("/api/tasks/search", auth, async (req, res) => {
+  try {
+    let result = await Task.aggregate([
+      {
+        $search: {
+          index: "titleIndex",
+          autocomplete: {
+            query: `${req.query.query}`,
+            path: "title",
+            fuzzy: {
+              maxEdits: 2,
+              prefixLength: 3,
+            },
+          },
+        },
+      },
+      { $limit: 5 },
+      { $project: { _id: 1, title: 1 } },
+    ]);
+    // console.log(result);
+    res.status(200).send(result);
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .send({ error: e.message, message: "Oops an Error Occurred" });
+  }
+});
+
 //get a single task
 router.get("/api/tasks/:id", auth, async (req, res) => {
   const _id = req.params.id;
+  let tempRes = {};
 
   try {
     const task = await Task.findOne({ _id, user_id: req.user._id });
     if (!task) return res.status(404).send({ error: "No such Docket Found" });
 
+    const date = task.deadline.slice(0, 10);
+    tempRes[date] = [task];
+
     res
       .status(200)
-      .send({ tasks: task, message: "Docket Fetched Successfully" });
+      .send({ tasks: tempRes, message: "Docket Fetched Successfully" });
   } catch (error) {
     res.status(500).send({ error: error, message: "Oops an Error Occurred" });
   }

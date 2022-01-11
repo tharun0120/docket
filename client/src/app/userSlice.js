@@ -131,7 +131,7 @@ const userSlice = createSlice({
       state.isFetching = false;
       state.isError = true;
       state.isSuccess = false;
-      console.log(payload);
+      // console.log(payload);
       state.error = payload;
     },
     //updateUser
@@ -169,7 +169,7 @@ const userSlice = createSlice({
       state.isFetching = false;
       state.isError = true;
       state.isSuccess = false;
-      console.log(payload);
+      // console.log(payload);
       state.error = payload;
     },
     //register

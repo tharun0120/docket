@@ -28,10 +28,61 @@ class TaskClass {
   }
 
   //get task
-  getTasks() {
+  getTasks(params) {
     return new Promise(async (resolve, reject) => {
       try {
-        const response = await fetch("api/tasks", {
+        const response = await fetch(`api/tasks?${params}`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        });
+        await response.json().then((data) => {
+          if (response.status === 200) {
+            resolve(data.tasks);
+          } else {
+            reject(data);
+          }
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  //search task
+  searchTasks({ params }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch(`api/tasks/search?${params}`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        });
+        await response.json().then((data) => {
+          // console.log(data);
+          if (response.status === 200) {
+            resolve(data);
+          } else {
+            reject(data);
+          }
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  //get single task
+  getSingleTask({ id }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch(`api/tasks/${id}`, {
           method: "GET",
           headers: {
             Accept: "application/json",

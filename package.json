@@ -14,6 +14,7 @@
   "author": "Tharun Kumar",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.24.0",
     "bcryptjs": "^2.4.3",
     "concurrently": "^7.0.0",
     "cors": "^2.8.5",
@@ -28,6 +29,7 @@
     "multer": "^1.4.2",
     "path": "^0.12.7",
     "react": "^17.0.2",
+    "react-modal": "^3.14.4",
     "react-tooltip": "^4.2.21",
     "sharp": "^0.28.3",
     "validator": "^13.6.0"

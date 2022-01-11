@@ -35,6 +35,15 @@ const taskSchema = mongoose.Schema(
   }
 );
 
+taskSchema.pre("save", async function (next) {
+  const task = this;
+  // if (user.isModified("password")) {
+  //   user.password = await bcrypt.hash(user.password, 8);
+  // }
+  // console.log(task);
+  next();
+});
+
 const tasks = mongoose.model("tasks", taskSchema);
 
 module.exports = tasks;

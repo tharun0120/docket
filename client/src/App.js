@@ -7,6 +7,7 @@ import AccountPage from "./pages/AccountPage";
 import HomePage from "./pages/HomePage";
 import Page404 from "./pages/404Page";
 import AboutPage from "./pages/AboutPage";
+import PrivateRoute from "./helpers/PrivateRoute";
 
 function App() {
   return (

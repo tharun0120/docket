@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { FaEdit } from "react-icons/fa";
+// import { FaEdit } from "react-icons/fa";
+import axios from "axios";
+import { BsUpload } from "react-icons/bs";
 import { toast } from "react-toastify";
+import Modal from "react-modal";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -14,17 +17,24 @@ import {
 import { selectTasks } from "../app/taskSlice";
 
 function Account() {
-  const [newPassword, setNewPassword] = useState();
+  const [password, setPassword] = useState("");
+  const [passwordRetype, setPasswordRetype] = useState("");
+  const [image, setImage] = useState();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [changePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
   const { user, isSuccess } = useSelector(selectUser);
   const { tasks } = useSelector(selectTasks);
   const history = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!user) {
-      history.push("/login");
-    }
-  });
+    fetch(`/api/users/${user._id}/avatar`).then((data) => {
+      data.blob().then((img) => {
+        const urlCreator = window.URL || window.webkitURL;
+        setImage(urlCreator.createObjectURL(img));
+      });
+    });
+  }, []);
 
   const getLength = () => {
     const keys = Object.keys(tasks);
@@ -43,12 +53,25 @@ function Account() {
       history.push("/login");
     }
   };
-  const changePassword = () => {
-    dispatch(updateUser(newPassword));
+  const changePassword = (e) => {
+    e.preventDefault();
+    if (password.length < 7) {
+      toast.warn("Password should be more than 7 characters");
+      return;
+    }
+    if (password !== passwordRetype) {
+      toast.warn("Password does not match");
+      return;
+    }
+    dispatch(
+      updateUser({
+        password: password,
+      })
+    );
     if (isSuccess) {
       toast.success("Password Changed Successfully");
+      logoutUser();
       history.push("/login");
-      localStorage.removeItem("token");
     }
   };
   const deleteAccount = () => {
@@ -59,16 +82,69 @@ function Account() {
       history.push("/login");
     }
   };
+  const uploadImage = (e) => {
+    const formData = new FormData();
+    formData.append("avatar", e.target.files[0]);
+    axios
+      .post("/api/users/me/avatar", formData, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then((data) => {
+        toast.success(data.data.message);
+      });
+  };
   return (
     <Container>
       <Panel>
-        <div
-          style={{
-            width: "300px",
-            height: "300px",
-            backgroundColor: "white",
-            borderRadius: "50%",
-          }}></div>
+        <div>
+          {image ? (
+            <img
+              src={image}
+              alt="avatar"
+              style={{
+                width: "300px",
+                height: "300px",
+                objectFit: "contain",
+                borderRadius: "50%",
+              }}
+            />
+          ) : (
+            <button
+              style={{
+                width: "300px",
+                height: "300px",
+                backgroundColor: "rgba(255,255,255,0.8)",
+                objectFit: "contain",
+                borderRadius: "50%",
+              }}>
+              <input
+                type="file"
+                id="image"
+                accept="image/*"
+                onChange={(e) => uploadImage(e)}
+                multiple={false}
+                style={{ display: "none" }}
+              />
+              <label
+                htmlFor="image"
+                style={{
+                  fontSize: "20px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  gap: "10px",
+                  width: "100%",
+                  height: "100%",
+                }}>
+                Click here to upload an image
+                <BsUpload style={{ fontSize: "40px" }} />
+              </label>
+            </button>
+          )}
+        </div>
         <div>
           <Wrap>
             <label htmlFor="displayName">Name</label>
@@ -99,12 +175,12 @@ function Account() {
         <div>
           <button
             style={{ backgroundColor: "red" }}
-            onClick={() => deleteAccount()}>
+            onClick={() => setDeleteModalOpen(true)}>
             Delete Account
           </button>
           <button
             style={{ backgroundColor: "green" }}
-            onClick={() => changePassword()}>
+            onClick={() => setChangePasswordModalOpen(true)}>
             Change Password
           </button>
         </div>
@@ -114,9 +190,145 @@ function Account() {
           Log Out
         </button>
       </ButtonPanel>
+      <Modal isOpen={deleteModalOpen} style={modalStyles}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
+          <span style={{ fontSize: "25px" }}>
+            Do you want to permanently delete your account?
+          </span>
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              justifyContent: "end",
+              alignItems: "center",
+            }}>
+            <button
+              style={{
+                margin: "0",
+                fontSize: "20px",
+                borderRadius: "5px",
+                padding: "10px",
+                color: "#eeeeee",
+                backgroundColor: "black",
+                border: "none",
+                textTransform: "uppercase",
+                cursor: "pointer",
+              }}
+              onClick={() => deleteAccount()}>
+              Yes
+            </button>
+            <button
+              style={{
+                margin: "0",
+                fontSize: "20px",
+                borderRadius: "5px",
+                padding: "10px",
+                color: "#eeeeee",
+                backgroundColor: "black",
+                border: "none",
+                textTransform: "uppercase",
+                cursor: "pointer",
+              }}
+              onClick={() => setDeleteModalOpen(false)}>
+              No
+            </button>
+          </div>
+        </div>
+      </Modal>
+      <Modal isOpen={changePasswordModalOpen} style={modalStyles}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+            gap: "20px",
+          }}>
+          <h2 style={{ fontSize: "20px" }}>Change Your Password</h2>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "5px",
+              fontSize: "16px",
+            }}>
+            <label>New Password</label>
+            <input
+              type="password"
+              style={{ padding: "10px" }}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              fontSize: "16px",
+            }}>
+            <label>Confirm New Password</label>
+            <input
+              type="password"
+              style={{ padding: "10px" }}
+              value={passwordRetype}
+              onChange={(e) => setPasswordRetype(e.target.value)}
+            />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "space-between",
+              paddingTop: "20px",
+            }}>
+            <button
+              style={{
+                margin: "0",
+                fontSize: "15px",
+                borderRadius: "5px",
+                padding: "10px",
+                color: "#eeeeee",
+                backgroundColor: "black",
+                border: "none",
+                textTransform: "uppercase",
+                cursor: "pointer",
+              }}
+              onClick={() => setChangePasswordModalOpen(false)}>
+              Close
+            </button>
+            <button
+              style={{
+                margin: "0",
+                fontSize: "15px",
+                borderRadius: "5px",
+                padding: "10px",
+                color: "#eeeeee",
+                backgroundColor: "black",
+                border: "none",
+                textTransform: "uppercase",
+                cursor: "pointer",
+              }}
+              onClick={(e) => changePassword(e)}>
+              Confirm
+            </button>
+          </div>
+        </div>
+      </Modal>
     </Container>
   );
 }
+
+const modalStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+};
 
 const Container = styled.section`
   display: flex;
@@ -139,7 +351,7 @@ const Panel = styled.div`
 
 const Wrap = styled.div`
   display: grid;
-  gap: 0;
+  gap: 60px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: center;
   justify-items: start;
@@ -148,7 +360,10 @@ const Wrap = styled.div`
   padding-bottom: 15px;
   font-size: 25px;
   text-align: center;
-  text-transform: uppercase;
+
+  label {
+    text-transform: uppercase;
+  }
 
   /* input {
     min-width: 18rem;

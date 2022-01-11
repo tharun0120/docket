@@ -32,7 +32,6 @@ const Register = () => {
   useEffect(() => {
     if (!user) {
       dispatch(isLoggedIn());
-      if (!isSuccess) history.push("/login");
     }
   }, [user]); //eslint-disable-line
 
