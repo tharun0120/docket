@@ -2,6 +2,7 @@ const express = require("express");
 const Task = require("../models/tasks");
 const router = new express.Router();
 const auth = require("../middleware/auth");
+const { response } = require("express");
 
 //create task
 router.post("/api/tasks", auth, async (req, res) => {
@@ -88,10 +89,42 @@ router.get("/api/tasks/search", auth, async (req, res) => {
         },
       },
       { $limit: 5 },
-      { $project: { _id: 1, title: 1 } },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          user_id: 1,
+        },
+      },
+      // {
+      //   $project: {
+      //     _id: {
+      //       $cond: {
+      //         if: {
+      //           $eq: ["$user_id", req.user._id],
+      //         },
+      //         then: "$_id",
+      //         else: "$false",
+      //       },
+      //     },
+      //     title: {
+      //       $cond: {
+      //         if: {
+      //           $eq: ["$user_id", req.user._id],
+      //         },
+      //         then: "$title",
+      //         else: "$false",
+      //       },
+      //     },
+      //   },
+      // },
     ]);
     // console.log(result);
-    res.status(200).send(result);
+    let tempRes = result.filter((element) => {
+      return element.user_id.toString() === req.user._id.toString();
+    });
+    // console.log(result);
+    res.status(200).send(tempRes);
   } catch (e) {
     console.log(e);
     res

@@ -21,7 +21,6 @@ const TaskBar = () => {
 
   useEffect(() => {
     setSearchQuery(searchString);
-    console.log(searchString);
   }, [searchString]);
 
   // useEffect(() => {
@@ -77,8 +76,8 @@ const TaskBar = () => {
           <AutoComplete>
             {searchQuery?.map((search) => {
               return (
-                <div key={search._id} onClick={() => setTask(search)}>
-                  {search.title}
+                <div key={search?._id} onClick={() => setTask(search)}>
+                  {search?.title}
                 </div>
               );
             })}

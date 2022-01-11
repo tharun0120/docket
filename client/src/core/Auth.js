@@ -1,5 +1,7 @@
 class AuthClass {
-  constructor() {}
+  constructor() {
+    this.token = localStorage.getItem("token");
+  }
 
   //login
   login({ email, password }) {
@@ -115,6 +117,7 @@ class AuthClass {
 
   //logout
   logout() {
+    localStorage.removeItem("token");
     return new Promise(async (resolve, reject) => {
       try {
         const response = await fetch("api/users/logout", {
@@ -122,12 +125,12 @@ class AuthClass {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
+            Authorization: "Bearer " + this.token,
           },
         });
         await response.json().then((data) => {
           if (response.status === 200) {
-            localStorage.removeItem("token");
+            // localStorage.removeItem("token");
             resolve(data.user);
           } else {
             reject(data);
@@ -141,6 +144,7 @@ class AuthClass {
 
   //delete user
   deleteUser() {
+    localStorage.removeItem("token");
     return new Promise(async (resolve, reject) => {
       try {
         const response = await fetch("api/users/me", {
@@ -148,12 +152,12 @@ class AuthClass {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
+            Authorization: "Bearer " + this.token,
           },
         });
         await response.json().then((data) => {
           if (response.status === 200) {
-            localStorage.removeItem("token");
+            // localStorage.removeItem("token");
             resolve(data.user);
           } else {
             reject(data);

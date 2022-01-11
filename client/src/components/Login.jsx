@@ -11,7 +11,8 @@ import homeBackground from "./images/homeBackground.svg";
 const Login = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { isError, isSuccess, isFetching, error } = useSelector(selectUser);
+  const { user, isError, isSuccess, isFetching, error } =
+    useSelector(selectUser);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -28,12 +29,15 @@ const Login = () => {
   useEffect(() => {
     if (isSuccess) {
       dispatch(clearState());
+      if (user) toast.success("Logged in Successfully");
       history.push("/");
     }
     if (isError) {
-      error.errors.map((error) => {
-        return toast.error(error);
-      });
+      // console.log(error);
+      if (error) toast.error(error.message);
+      // error.errors.map((error) => {
+      //   return toast.error(error);
+      // });
       dispatch(clearState());
     }
   }, [isSuccess, isError]); //eslint-disable-line

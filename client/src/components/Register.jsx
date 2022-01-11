@@ -37,12 +37,14 @@ const Register = () => {
   useEffect(() => {
     if (isSuccess) {
       dispatch(clearState());
+      toast.success("Registered Successfully");
       history.push("/");
     }
     if (isError) {
-      error.errors.map((error) => {
-        return toast.error(error);
-      });
+      if (error.message) toast.error(error.message);
+      // error.errors.map((error) => {
+      //   return toast.error(error);
+      // });
       dispatch(clearState());
     }
   }, [isSuccess, isError]); //eslint-disable-line
