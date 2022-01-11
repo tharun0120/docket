@@ -13,21 +13,23 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/">
-          <HomePage />
-        </Route>
         <Route path="/login">
           <LoginPage />
         </Route>
         <Route path="/register">
           <RegisterPage />
         </Route>
-        <Route path="/account">
-          <AccountPage />
-        </Route>
         <Route path="/about">
           <AboutPage />
         </Route>
+        <PrivateRoute exact component={HomePage} path="/" />
+        <PrivateRoute exact component={AccountPage} path="/account" />
+        {/* <Route exact path="/">
+          <HomePage />
+        </Route>
+        <Route path="/account">
+          <AccountPage />
+        </Route> */}
         <Route path="/*">
           <Page404 />
         </Route>

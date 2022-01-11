@@ -8,6 +8,7 @@ import {
   getTasks,
   searchTasks,
   getSingleTask,
+  clearTaskState,
 } from "../app/taskSlice";
 import { FiSearch } from "react-icons/fi";
 
@@ -20,7 +21,14 @@ const TaskBar = () => {
 
   useEffect(() => {
     setSearchQuery(searchString);
+    console.log(searchString);
   }, [searchString]);
+
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(clearTaskState());
+  //   };
+  // }, []); //eslint-disable-line
 
   const onAddTask = () => {
     setShowAddTask(!showAddTask);
@@ -78,9 +86,7 @@ const TaskBar = () => {
         </SearchBar>
         <SortBar>
           <select name="sortBy" id="sortBy" onChange={(e) => sortTask(e)}>
-            <option value="default" selected>
-              Sort By
-            </option>
+            <option value="default">Sort By</option>
             <option value="all">All</option>
             <option value="priority">Priority</option>
             <option value="completed">Completed</option>

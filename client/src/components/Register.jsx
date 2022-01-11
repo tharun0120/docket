@@ -19,28 +19,27 @@ import loginImg from "./images/login.svg";
 const Register = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { user, isError, isSuccess, isFetching, error } =
-    useSelector(selectUser);
+  const { isError, isSuccess, isFetching, error } = useSelector(selectUser);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
 
   useEffect(() => {
-    if (user) history.push("/");
-  }, [user]); //eslint-disable-line
+    dispatch(isLoggedIn());
+  }, []); //eslint-disable-line
 
   useEffect(() => {
-    if (!user) {
-      dispatch(isLoggedIn());
-    }
-  }, [user]); //eslint-disable-line
+    return () => {
+      dispatch(clearState());
+    };
+  }, []); //eslint-disable-line
 
   useEffect(() => {
     if (isSuccess) {
+      dispatch(clearState());
       history.push("/");
     }
     if (isError) {
-      console.log(error);
       error.errors.map((error) => {
         return toast.error(error);
       });

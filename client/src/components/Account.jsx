@@ -13,6 +13,7 @@ import {
   deleteUser,
   logout,
   clearState,
+  isLoggedIn,
 } from "../app/userSlice";
 import { selectTasks } from "../app/taskSlice";
 
@@ -22,19 +23,34 @@ function Account() {
   const [image, setImage] = useState();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [changePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
-  const { user, isSuccess } = useSelector(selectUser);
+  const { user, isSuccess, isError } = useSelector(selectUser);
   const { tasks } = useSelector(selectTasks);
   const history = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetch(`/api/users/${user._id}/avatar`).then((data) => {
-      data.blob().then((img) => {
-        const urlCreator = window.URL || window.webkitURL;
-        setImage(urlCreator.createObjectURL(img));
-      });
+    dispatch(isLoggedIn());
+  }, []); //eslint-disable-line
+
+  useEffect(() => {
+    if (isError) {
+      dispatch(clearState());
+      history.push("/login");
+    }
+  }, [isError]); //eslint-disable-line
+
+  useEffect(() => {
+    fetch(`/api/users/${user?._id}/avatar`).then((data) => {
+      if (data.status === 200)
+        data.blob().then((img) => {
+          const urlCreator = window.URL || window.webkitURL;
+          setImage(urlCreator.createObjectURL(img));
+        });
+      else {
+        setImage(null);
+      }
     });
-  }, []);
+  }, [user]); //eslint-disable-line
 
   const getLength = () => {
     const keys = Object.keys(tasks);
@@ -190,7 +206,10 @@ function Account() {
           Log Out
         </button>
       </ButtonPanel>
-      <Modal isOpen={deleteModalOpen} style={modalStyles}>
+      <Modal
+        isOpen={deleteModalOpen}
+        style={modalStyles}
+        appElement={document.getElementById("root") || undefined}>
         <div style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
           <span style={{ fontSize: "25px" }}>
             Do you want to permanently delete your account?
@@ -235,7 +254,10 @@ function Account() {
           </div>
         </div>
       </Modal>
-      <Modal isOpen={changePasswordModalOpen} style={modalStyles}>
+      <Modal
+        isOpen={changePasswordModalOpen}
+        style={modalStyles}
+        appElement={document.getElementById("root") || undefined}>
         <div
           style={{
             display: "flex",

@@ -37,7 +37,10 @@ const Header = ({ page }) => {
         </Link>
       </ButtonPanel>
       <ReactTooltip place="bottom" type="dark" />
-      <Modal isOpen={modalOpen} style={modalStyles}>
+      <Modal
+        isOpen={modalOpen}
+        style={modalStyles}
+        appElement={document.getElementById("root") || undefined}>
         <div style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
           <div style={{ width: "100%" }}>
             <IoCloseSharp

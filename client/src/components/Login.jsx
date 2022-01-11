@@ -11,34 +11,29 @@ import homeBackground from "./images/homeBackground.svg";
 const Login = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { user, isError, isSuccess, isFetching, error } =
-    useSelector(selectUser);
+  const { isError, isSuccess, isFetching, error } = useSelector(selectUser);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (user) history.push("/");
-  }, [user]); //eslint-disable-line
+    dispatch(isLoggedIn());
+  }, []); //eslint-disable-line
 
   useEffect(() => {
-    if (!user) {
-      dispatch(isLoggedIn());
-      if (!isSuccess) history.push("/login");
-    }
-  }, [user]); //eslint-disable-line
+    return () => {
+      dispatch(clearState());
+    };
+  }, []); //eslint-disable-line
 
   useEffect(() => {
     if (isSuccess) {
+      dispatch(clearState());
       history.push("/");
     }
     if (isError) {
-      // if (error?.error) {
-      //   toast.error(error?.error);
-      //   return dispatch(clearState());
-      // }
-      // error.errors.map((error) => {
-      //   return toast.error(error);
-      // });
+      error.errors.map((error) => {
+        return toast.error(error);
+      });
       dispatch(clearState());
     }
   }, [isSuccess, isError]); //eslint-disable-line
@@ -49,9 +44,6 @@ const Login = () => {
       password,
     };
     dispatch(login(user));
-    if (isSuccess) {
-      history.push("/");
-    }
   };
 
   const onSubmit = (e) => {

@@ -1,27 +1,25 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUser, isLoggedIn, getUser } from "../app/userSlice";
-import { selectTasks } from "../app/taskSlice";
+import { selectUser, isLoggedIn, clearState } from "../app/userSlice";
 import MainContent from "../components/MainContent";
 import Header from "../components/Header";
 
 function HomePage() {
-  const { user, isSuccess } = useSelector(selectUser);
-  const { tasks } = useSelector(selectTasks);
+  const { isError } = useSelector(selectUser);
   const history = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUser());
-  }, [tasks]);
+    dispatch(isLoggedIn());
+  }, []); //eslint-disable-line
 
   useEffect(() => {
-    if (!user) {
-      dispatch(isLoggedIn());
-      if (!isSuccess) history.push("/login");
+    if (isError) {
+      dispatch(clearState());
+      history.push("/login");
     }
-  }, [user]); //eslint-disable-line
+  }, [isError]); //eslint-disable-line
 
   return (
     <section
