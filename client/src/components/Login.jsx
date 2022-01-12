@@ -27,16 +27,11 @@ const Login = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      dispatch(clearState());
       if (user) toast.success("Logged in Successfully");
       history.push("/");
     }
     if (isError) {
-      // console.log(error);
       if (error) toast.error(error.message);
-      // error.errors.map((error) => {
-      //   return toast.error(error);
-      // });
       dispatch(clearState());
     }
   }, [isSuccess, isError]); //eslint-disable-line

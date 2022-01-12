@@ -18,17 +18,17 @@ const HomePage = Loadable({
 
 const LoginPage = Loadable({
   loader: () => import("./pages/LoginPage"),
-  loading: Loader,
+  // loading: Loader,
 });
 
 const RegisterPage = Loadable({
   loader: () => import("./pages/RegisterPage"),
-  loading: Loader,
+  // loading: Loader,
 });
 
 const AccountPage = Loadable({
   loader: () => import("./pages/AccountPage"),
-  loading: Loader,
+  // loading: Loader,
 });
 
 const Page404 = Loadable({
@@ -38,7 +38,7 @@ const Page404 = Loadable({
 
 const AboutPage = Loadable({
   loader: () => import("./pages/AboutPage"),
-  loading: Loader,
+  // loading: Loader,
 });
 
 function App() {
