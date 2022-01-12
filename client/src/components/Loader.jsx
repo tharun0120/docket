@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-const Loader = () => {
-  return (
+const Loader = (props) => {
+  return props.pastDelay ? null : (
     <Container>
       <Spinner></Spinner>
     </Container>
@@ -15,7 +15,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* background-color: rgba(0, 0, 0, 0.8); */
+  background-color: rgba(255, 255, 255, 0.8);
   background-color: transparent;
 `;
 

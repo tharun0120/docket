@@ -14,31 +14,37 @@ import Loader from "./components/Loader";
 const HomePage = Loadable({
   loader: () => import("./pages/HomePage"),
   loading: Loader,
+  delay: 300,
 });
 
 const LoginPage = Loadable({
   loader: () => import("./pages/LoginPage"),
-  // loading: Loader,
+  loading: Loader,
+  delay: 300,
 });
 
 const RegisterPage = Loadable({
   loader: () => import("./pages/RegisterPage"),
-  // loading: Loader,
+  loading: Loader,
+  delay: 300,
 });
 
 const AccountPage = Loadable({
   loader: () => import("./pages/AccountPage"),
-  // loading: Loader,
+  loading: Loader,
+  delay: 300,
 });
 
 const Page404 = Loadable({
   loader: () => import("./pages/404Page"),
   loading: Loader,
+  delay: 300,
 });
 
 const AboutPage = Loadable({
   loader: () => import("./pages/AboutPage"),
-  // loading: Loader,
+  loading: Loader,
+  delay: 300,
 });
 
 function App() {
