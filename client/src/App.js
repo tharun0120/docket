@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import PrivateRoute from "./helpers/PrivateRoute";
 import Loadable from "react-loadable";
 import Loader from "./components/Loader";
-// import LoginPage from "./pages/LoginPage";
-// import RegisterPage from "./pages/RegisterPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 // import AccountPage from "./pages/AccountPage";
 // import HomePage from "./pages/HomePage";
 // import Page404 from "./pages/404Page";
@@ -17,17 +17,17 @@ const HomePage = Loadable({
   delay: 300,
 });
 
-const LoginPage = Loadable({
-  loader: () => import("./pages/LoginPage"),
-  loading: Loader,
-  delay: 300,
-});
+// const LoginPage = Loadable({
+//   loader: () => import("./pages/LoginPage"),
+//   loading: Loader,
+//   delay: 300,
+// });
 
-const RegisterPage = Loadable({
-  loader: () => import("./pages/RegisterPage"),
-  loading: Loader,
-  delay: 300,
-});
+// const RegisterPage = Loadable({
+//   loader: () => import("./pages/RegisterPage"),
+//   loading: Loader,
+//   delay: 300,
+// });
 
 const AccountPage = Loadable({
   loader: () => import("./pages/AccountPage"),
