@@ -81,6 +81,7 @@ const Header = ({ page }) => {
               backgroundColor: "rgb(34, 40, 49)",
               border: "none",
               cursor: "pointer",
+              marginTop: "20px",
             }}
             onClick={() => setModalOpen(false)}>
             DISMISS
