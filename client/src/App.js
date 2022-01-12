@@ -1,13 +1,45 @@
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import AccountPage from "./pages/AccountPage";
-import HomePage from "./pages/HomePage";
-import Page404 from "./pages/404Page";
-import AboutPage from "./pages/AboutPage";
 import PrivateRoute from "./helpers/PrivateRoute";
+import Loadable from "react-loadable";
+import Loader from "./components/Loader";
+// import LoginPage from "./pages/LoginPage";
+// import RegisterPage from "./pages/RegisterPage";
+// import AccountPage from "./pages/AccountPage";
+// import HomePage from "./pages/HomePage";
+// import Page404 from "./pages/404Page";
+// import AboutPage from "./pages/AboutPage";
+
+const HomePage = Loadable({
+  loader: () => import("./pages/HomePage"),
+  loading: Loader,
+});
+
+const LoginPage = Loadable({
+  loader: () => import("./pages/LoginPage"),
+  loading: Loader,
+});
+
+const RegisterPage = Loadable({
+  loader: () => import("./pages/RegisterPage"),
+  loading: Loader,
+});
+
+const AccountPage = Loadable({
+  loader: () => import("./pages/AccountPage"),
+  loading: Loader,
+});
+
+const Page404 = Loadable({
+  loader: () => import("./pages/404Page"),
+  loading: Loader,
+});
+
+const AboutPage = Loadable({
+  loader: () => import("./pages/AboutPage"),
+  loading: Loader,
+});
 
 function App() {
   return (
