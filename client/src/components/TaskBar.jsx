@@ -8,7 +8,7 @@ import {
   getTasks,
   searchTasks,
   getSingleTask,
-  clearTaskState,
+  // clearTaskState,
 } from "../app/taskSlice";
 import { FiSearch } from "react-icons/fi";
 

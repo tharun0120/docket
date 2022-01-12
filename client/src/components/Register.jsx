@@ -13,13 +13,13 @@ import {
 } from "./Login";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, register, clearState, isLoggedIn } from "../app/userSlice";
-import Loader from "./Loader";
+// import Loader from "./Loader";
 import loginImg from "./images/login.svg";
 
 const Register = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { isError, isSuccess, isFetching, error } = useSelector(selectUser);
+  const { isError, isSuccess, error } = useSelector(selectUser);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -82,18 +82,7 @@ const Register = () => {
     setPassword("");
   };
 
-  return isFetching ? (
-    <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}>
-      <Loader />
-    </div>
-  ) : (
+  return (
     <LoginContainer>
       <LoginBox>
         <Container>
