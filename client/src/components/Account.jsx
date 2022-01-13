@@ -54,7 +54,7 @@ function Account() {
         });
     }
     getAvatar();
-  }); //eslint-disable-line
+  }, [user]); //eslint-disable-line
 
   const getLength = () => {
     const keys = Object.keys(tasks);
