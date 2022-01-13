@@ -18,7 +18,7 @@ function Overview() {
 
   useEffect(() => {
     dispatch(getAllTasks());
-  }, [user, tasks]); //eslint-disable-line
+  }, [tasks]); //eslint-disable-line
 
   const getLength = () => {
     const keys = Object.keys(allTasks);

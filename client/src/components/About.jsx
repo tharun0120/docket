@@ -9,7 +9,10 @@ const About = () => {
     <Container>
       <AboutContainer>
         <GithubIcon>
-          <a href="fda" rel="noreferrer" target="_blank">
+          <a
+            href="https://github.com/tharun0120/docket"
+            rel="noreferrer"
+            target="_blank">
             <FaGithub
               style={{
                 cursor: "pointer",
