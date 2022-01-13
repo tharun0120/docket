@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-<img src="./client/public/favicon.png" >
+<img src="https://s10.gifyu.com/images/favicon0a585583a22b7d7e.png" >
 
 # Docket.
 
