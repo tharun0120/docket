@@ -1,0 +1,35 @@
+### Overview of My Submission
+
+    Hello There! I am Tharun and I am really happy to present to you the **Docket.** (You guessed it, a ToDo App). It is powered by the beloved [react](url) with [node](url) as the backend doing all the heavy lifting and ofcourse, one of the the well thought out and most awesome nosql database out there our favorite [MongoDB](url) storing all the app's data.
+
+    Some of the highlights of Docket. are,
+
+- Persistent user authentication using the powerful yet simple redux ([redux-toolkit](url) to be precise) with the help of our beloved broweser api local storage
+
+- 🔥 Streak based appreciation system for that juicy adrenaline and that sense of satisfaction
+
+- 🔎 Search function with autocomplete to search for all those backlogged or forgotten tasks (or should I say dockets 😉) powered by mongodb atlas search with the help of indexes
+
+- 🌐 Live version deployed on the student/dev platform heroku for that sweet full stack deployement in minimal to no time
+
+[Note]: # (Please make sure the project links to the appropriate GitHub repository, and includes the [Apache-2 permissive license](https://www.apache.org/licenses/LICENSE-2.0)  and README.)
+
+### Submission Category
+
+Choose Your Own Adventure 🌏🗺️
+
+
+### Link to Code
+
+[Note]: # (Our markdown editor supports pretty embeds. Try this syntax: `{% github link_to_your_repo %}` to share a GitHub repository)
+
+
+### Additional Resources / Info
+
+- Be Motivated with Streaks 🔥
+
+![streaks-imgae](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/n7vstvc6y1fo4g99ihti.png)
+
+[Note:] # Screenshots/demo videos are encouraged!
+
+[Reminder]: # (Submissions are due on January 13th, 2022 @ 11:59 PM PT/2 AM ET on January 14th, 2022/6 AM UTC on January 14th, 2022).

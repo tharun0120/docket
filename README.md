@@ -9,3 +9,9 @@
 - 🔎 Search function with autocomplete to search for all those backlogged or forgotten tasks (or should I say dockets 😉) powered by mongodb atlas search with the help of indexes
 
 - 🌐 Live version deployed on heroku for that sweet full stack deployement in minimal to no time
+
+---
+
+ <img src="https://github.com/tharun0120/tharun0120/blob/main/logos/react.svg" width="65" height="65"/>
+  <img src="https://github.com/tharun0120/tharun0120/blob/main/logos/nodejs.svg" width="65" height="65"/>
+  <img src="https://github.com/tharun0120/tharun0120/blob/main/logos/mongodb.svg" width="65" height="65"/>
