@@ -1,6 +1,12 @@
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+<img src="./client/public/favicon.png" >
+
 # Docket.
 
-&nbsp;&nbsp;&nbsp;&nbsp;Hello There! I am Tharun and I am really happy to present to you the **Docket.** (You guessed it, a ToDo App). It is powered by the beloved [react](url) with [node](url) as the backend doing all the heavy lifting and ofcourse, one of the well thought out and most awesome nosql database out there our very favorite [MongoDB](url) storing all the app's data.
+&nbsp;&nbsp;&nbsp;&nbsp;Yet another feature rich, fast and minimalist Todo App with awesome features like search recommendation, streak based appeaciation and much more to look foreward to.
+
+> Now being organised and nailing those ideas and thoughts into actionable events is easier than ever.
 
 &nbsp;&nbsp;&nbsp;&nbsp;Some of the highlights of Docket. are,
 
@@ -13,6 +19,22 @@
 - 🌐 Live version deployed on heroku for that sweet full stack deployement in minimal to no time
 
 ---
+
+### Check Docket. from [here](http://docket-todo-app.herokuapp.com/)
+
+---
+
+#### Be Motivated with Streaks 🔥
+
+![streaks-image](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/n7vstvc6y1fo4g99ihti.png)
+
+#### Search with AutoComplete 🔎
+
+![autocomplete](https://s10.gifyu.com/images/autocomplete6a3765c41aa6bd99.gif)
+
+#### Stay Signed In ⚡
+
+![stay signed in](https://s10.gifyu.com/images/stay-signed-in.gif)
 
 <p align="center">
  <img src="https://github.com/tharun0120/tharun0120/blob/main/logos/react.svg" width="65" height="65"/>
