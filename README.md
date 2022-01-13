@@ -10,7 +10,7 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp;Some of the highlights of Docket. are,
 
-- ⚡ Persistent user authentication using the powerful yet simple redux ([redux-toolkit](url) to be precise) with the help of our beloved broweser api local storage
+- ⚡ Persistent user authentication using the powerful yet simple redux ([redux-toolkit](https://redux-toolkit.js.org/) to be precise) with the help of our beloved broweser api local storage
 
 - 🔥 Streak based appreciation system for that juicy adrenaline and that sense of satisfaction
 
