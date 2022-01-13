@@ -4,14 +4,14 @@ import { toast } from "react-toastify";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login, selectUser, clearState, isLoggedIn } from "../app/userSlice";
-// import Loader from "./Loader";
+import Loader from "./Loader";
 import loginImg from "./images/login.svg";
 import homeBackground from "./images/homeBackground.svg";
 
 const Login = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { user, isError, isSuccess, error } = useSelector(selectUser);
+  const { isError, isFetching, isSuccess, error } = useSelector(selectUser);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -27,7 +27,8 @@ const Login = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      if (user) toast.success("Logged in Successfully");
+      if (localStorage.getItem("token"))
+        toast.success("Logged in Successfully");
       history.push("/");
     }
     if (isError) {
@@ -62,7 +63,9 @@ const Login = () => {
     setPassword("");
   };
 
-  return (
+  return isFetching ? (
+    <Loader />
+  ) : (
     <LoginContainer>
       <LoginBox>
         <Container>

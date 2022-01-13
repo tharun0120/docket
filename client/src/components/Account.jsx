@@ -40,17 +40,21 @@ function Account() {
   }, [isError]); //eslint-disable-line
 
   useEffect(() => {
-    fetch(`/api/users/${user?._id}/avatar`).then((data) => {
-      if (data.status === 200)
-        data.blob().then((img) => {
-          const urlCreator = window.URL || window.webkitURL;
-          setImage(urlCreator.createObjectURL(img));
+    async function getAvatar() {
+      if (user)
+        fetch(`/api/users/${user?._id}/avatar`).then((data) => {
+          if (data.status === 200)
+            data.blob().then((img) => {
+              const urlCreator = window.URL || window.webkitURL;
+              setImage(urlCreator.createObjectURL(img));
+            });
+          else {
+            setImage(null);
+          }
         });
-      else {
-        setImage(null);
-      }
-    });
-  }, [user]); //eslint-disable-line
+    }
+    getAvatar();
+  }); //eslint-disable-line
 
   const getLength = () => {
     const keys = Object.keys(tasks);
@@ -101,6 +105,7 @@ function Account() {
   const uploadImage = (e) => {
     const formData = new FormData();
     formData.append("avatar", e.target.files[0]);
+    let image;
     axios
       .post("/api/users/me/avatar", formData, {
         headers: {
@@ -108,24 +113,96 @@ function Account() {
         },
       })
       .then((data) => {
+        image = data.data.avatar;
+        toast.success(data.data.message);
+      });
+    setImage(image);
+  };
+
+  const deleteAvatar = () => {
+    axios
+      .delete("/api/users/me/avatar", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then((data) => {
+        setImage(null);
         toast.success(data.data.message);
       });
   };
+
   return (
     <Container>
       <Panel>
         <div>
           {image ? (
-            <img
-              src={image}
-              alt="avatar"
-              style={{
-                width: "300px",
-                height: "300px",
-                objectFit: "contain",
-                borderRadius: "50%",
-              }}
-            />
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+              <img
+                src={image}
+                alt="avatar"
+                style={{
+                  width: "300px",
+                  height: "300px",
+                  objectFit: "contain",
+                  borderRadius: "50%",
+                }}
+              />
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "25px",
+                }}>
+                <button
+                  style={{
+                    margin: "0",
+                    fontSize: "16px",
+                    borderRadius: "5px",
+                    padding: "10px",
+                    color: "#eeeeee",
+                    backgroundColor: "black",
+                    border: "none",
+                    textTransform: "uppercase",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => deleteAvatar()}>
+                  Delete
+                </button>
+                <button
+                  style={{
+                    margin: "0",
+                    fontSize: "16px",
+                    borderRadius: "5px",
+                    padding: "10px",
+                    color: "#eeeeee",
+                    backgroundColor: "black",
+                    border: "none",
+                    textTransform: "uppercase",
+                    cursor: "pointer",
+                  }}>
+                  <input
+                    type="file"
+                    id="image"
+                    accept="image/*"
+                    onChange={(e) => uploadImage(e)}
+                    multiple={false}
+                    style={{ display: "none" }}
+                  />
+                  <label
+                    htmlFor="image"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      cursor: "pointer",
+                    }}>
+                    Change
+                  </label>
+                </button>
+              </div>
+            </div>
           ) : (
             <button
               style={{

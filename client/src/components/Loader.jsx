@@ -2,11 +2,11 @@ import React from "react";
 import styled from "styled-components";
 
 const Loader = (props) => {
-  return props.pastDelay ? null : (
+  return props.pastDelay ? (
     <Container>
       <Spinner></Spinner>
     </Container>
-  );
+  ) : null;
 };
 
 const Container = styled.div`
