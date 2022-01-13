@@ -1,3 +1,5 @@
+# Docket.
+
 &nbsp;&nbsp;&nbsp;&nbsp;Hello There! I am Tharun and I am really happy to present to you the **Docket.** (You guessed it, a ToDo App). It is powered by the beloved [react](url) with [node](url) as the backend doing all the heavy lifting and ofcourse, one of the well thought out and most awesome nosql database out there our very favorite [MongoDB](url) storing all the app's data.
 
 &nbsp;&nbsp;&nbsp;&nbsp;Some of the highlights of Docket. are,
@@ -12,6 +14,9 @@
 
 ---
 
+<p align="center">
  <img src="https://github.com/tharun0120/tharun0120/blob/main/logos/react.svg" width="65" height="65"/>
   <img src="https://github.com/tharun0120/tharun0120/blob/main/logos/nodejs.svg" width="65" height="65"/>
   <img src="https://github.com/tharun0120/tharun0120/blob/main/logos/mongodb.svg" width="65" height="65"/>
+  <img src="https://github.com/tharun0120/tharun0120/blob/main/logos/express.svg" width="65" height="65"/>
+</p>
