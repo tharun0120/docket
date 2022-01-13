@@ -27,6 +27,7 @@ function Account() {
   const { tasks } = useSelector(selectTasks);
   const history = useHistory();
   const dispatch = useDispatch();
+  const [fetchImage, setFetchImage] = useState(false);
 
   useEffect(() => {
     dispatch(isLoggedIn());
@@ -40,7 +41,7 @@ function Account() {
   }, [isError]); //eslint-disable-line
 
   useEffect(() => {
-    async function getAvatar() {
+    async function fetchAvatar() {
       if (user)
         fetch(`/api/users/${user?._id}/avatar`).then((data) => {
           if (data.status === 200)
@@ -53,8 +54,8 @@ function Account() {
           }
         });
     }
-    getAvatar();
-  }, [user]); //eslint-disable-line
+    fetchAvatar();
+  }, [user, fetchImage]); //eslint-disable-line
 
   const getLength = () => {
     const keys = Object.keys(tasks);
@@ -102,21 +103,20 @@ function Account() {
       history.push("/login");
     }
   };
-  const uploadImage = (e) => {
+  const uploadImage = async (e) => {
     const formData = new FormData();
     formData.append("avatar", e.target.files[0]);
-    let image;
-    axios
+    await axios
       .post("/api/users/me/avatar", formData, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       })
       .then((data) => {
-        image = data.data.avatar;
+        setImage(data.data.avatar);
         toast.success(data.data.message);
+        setFetchImage(true);
       });
-    setImage(image);
   };
 
   const deleteAvatar = () => {
@@ -171,7 +171,7 @@ function Account() {
                   onClick={() => deleteAvatar()}>
                   Delete
                 </button>
-                <button
+                {/* <button
                   style={{
                     margin: "0",
                     fontSize: "16px",
@@ -200,7 +200,7 @@ function Account() {
                     }}>
                     Change
                   </label>
-                </button>
+                </button> */}
               </div>
             </div>
           ) : (
