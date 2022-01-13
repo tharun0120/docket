@@ -135,7 +135,9 @@ router.post(
 
     req.user.avatar = buffer;
     await req.user.save();
-    res.status(200).send({ message: "Avatar added successfully" });
+    res
+      .status(200)
+      .send({ avatar: req.user.avatar, message: "Avatar added successfully" });
   },
   (error, req, res, next) => {
     res
